@@ -11,10 +11,14 @@ const main = async ({
     bundlewatchServiceHost,
     ci,
     defaultCompression,
+    removeHash = false,
+    hashPattern = /\*.bundle.js/,
 }) => {
     const currentBranchFileDetails = getLocalFileDetails({
         files,
         defaultCompression: defaultCompression,
+        removeHash,
+        hashPattern,
     })
 
     const bundlewatchService = new BundleWatchService({

@@ -3,7 +3,12 @@ import glob from 'glob'
 import getSize from './getSize'
 import logger from '../../logger'
 
-const getLocalFileDetails = ({ files, defaultCompression }) => {
+const getLocalFileDetails = ({
+    files,
+    defaultCompression,
+    removeHash,
+    hashPattern,
+}) => {
     const fileDetails = {}
 
     files.forEach((file) => {
@@ -24,7 +29,14 @@ const getLocalFileDetails = ({ files, defaultCompression }) => {
                 })
 
                 if (size) {
-                    fileDetails[filePath] = {
+                    let normalizedFilePath = file.path
+
+                    if (removeHash) {
+                        normalizedFilePath = file.path.replace(hashPattern, '')
+                    }
+
+                    paths = glob.sync(normalizedFilePath)
+                    fileDetails[normalizedFilePath] = {
                         maxSize,
                         size,
                         compression,
